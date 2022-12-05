@@ -6,6 +6,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
+
+
+
 namespace ProyectoTest.Logica
 {
     public class UsuarioLogica
