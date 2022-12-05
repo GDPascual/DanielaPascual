@@ -23,20 +23,20 @@ namespace ProyectoTest.Controllers
         public ActionResult Index(string NCorreo, string NContrasena)
         {
             
-            Usuario oUsuario = new Usuario();
+            Cliente oCliente = new Cliente();
 
-            oUsuario = UsuarioLogica.Instancia.Obtener(NCorreo, NContrasena);
+            oCliente = ClienteLogica.Instancia.Obtener(NCorreo, NContrasena);
 
-            if (oUsuario == null)
+            if (oCliente == null)
             {
                 ViewBag.Error = "Correo o contraseña no correcta";
                 return View();
             }
 
-            FormsAuthentication.SetAuthCookie(oUsuario.Correo, false);
-            Session["Usuario"] = oUsuario;
+            FormsAuthentication.SetAuthCookie(oCliente.Correo, false);
+            Session["Cliente"] = oCliente;
 
-            if (oUsuario.EsAdministrador == true)
+            if (oCliente.EsAdministrador == true)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -50,13 +50,13 @@ namespace ProyectoTest.Controllers
         // GET: Login
         public ActionResult Registrarse()
         {
-            return View(new Usuario() { Nombres= "",Apellidos= "",Correo="",Contrasena="",ConfirmarContrasena="" });
+            return View(new Cliente() { Nombres= "",Apellidos= "",Correo="",Contrasena="",ConfirmarContrasena="" });
         }
 
         [HttpPost]
         public ActionResult Registrarse(string NNombres, string NApellidos, string NCorreo, string NContrasena, string NConfirmarContrasena)
         {
-            Usuario oUsuario = new Usuario()
+            Cliente oCliente = new Cliente()
             {
                 Nombres = NNombres,
                 Apellidos = NApellidos,
@@ -69,14 +69,14 @@ namespace ProyectoTest.Controllers
             if (NContrasena != NConfirmarContrasena)
             {
                 ViewBag.Error = "Las contraseñas no coinciden";
-                return View(oUsuario);
+                return View(oCliente);
             }
             else {
                 
 
-                int idusuario_respuesta = UsuarioLogica.Instancia.Registrar(oUsuario);
+                int idcliente_respuesta = ClienteLogica.Instancia.Registrar(oCliente);
 
-                if (idusuario_respuesta == 0)
+                if (idcliente_respuesta == 0)
                 {
                     ViewBag.Error = "Error al registrar";
                     return View();

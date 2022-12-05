@@ -130,40 +130,40 @@
                     $.LoadingOverlay("hide");
                     if (data.lista != null) {
                         $.each(data.lista, function (i, item) {
-                            $("<div>").addClass("card mb-2 card-producto").append(
+                            $("<div>").addClass("card mb-2 card-articulo").append(
 
                                 $("<div>").addClass("card-body").append(
 
                                     $("<div>").addClass("row").append(
                                         $("<div>").addClass("col-1").append(
-                                            $("<img>").addClass("rounded").attr({ "src": "data:image/" + item.oProducto.extension + ";base64," + item.oProducto.base64, "width": "50" })
+                                            $("<img>").addClass("rounded").attr({ "src": "data:image/" + item.oArticulo.extension + ";base64," + item.oArticulo.base64, "width": "50" })
                                         ),
                                         $("<div>").addClass("col-7").append(
                                             $("<div>").addClass("ml-2").append(
-                                                $("<span>").addClass("font-weight-bold d-block").text(item.oProducto.oMarca.Descripcion),
-                                                $("<span>").addClass("spec").text(item.oProducto.Nombre),
+                                                $("<span>").addClass("font-weight-bold d-block").text(item.oArticulo.oMarca.Descripcion),
+                                                $("<span>").addClass("spec").text(item.oArticulo.Nombre),
                                                 $("<span>").addClass("float-end").text("Precio : S./" + item.oProducto.Precio )
                                             )
                                         ),
                                         $("<div>").addClass("col-3").append(
                                             $("<div>").addClass("d-flex justify-content-end controles").append(
                                                 $("<button>").addClass("btn btn-outline-secondary btn-restar rounded-0").append($("<i>").addClass("fas fa-minus")).attr({ "type": "button" }),
-                                                $("<input>").addClass("form-control input-cantidad p-1 text-center rounded-0").css({ "width": "40px" }).attr({ "disabled": "disabled" }).val("1").data("precio", item.oProducto.Precio).data("idproducto", item.oProducto.IdProducto),
+                                                $("<input>").addClass("form-control input-cantidad p-1 text-center rounded-0").css({ "width": "40px" }).attr({ "disabled": "disabled" }).val("1").data("precio", item.oArticulo.Precio).data("idarticulo", item.oArticulo.IdArticulo),
                                                 $("<button>").addClass("btn btn-outline-secondary btn-sumar rounded-0").append($("<i>").addClass("fas fa-plus")).attr({ "type": "button" })
                                             )
                                         ),
                                         $("<div>").addClass("col-1").append(
-                                            $("<button>").addClass("btn btn-outline-danger btn-eliminar").append($("<i>").addClass("far fa-trash-alt")).data("informacion", { _IdCarrito: item.IdCarrito, _IdProducto: item.oProducto.IdProducto}),
+                                            $("<button>").addClass("btn btn-outline-danger btn-eliminar").append($("<i>").addClass("far fa-trash-alt")).data("informacion", { _IdCarrito: item.IdCarrito, _IdArticulo: item.oArticulo.IdArticulo }),
                                         )
                                     )
                                 )
-                            ).appendTo("#productos-seleccionados");
+                            ).appendTo("#articulos-seleccionados");
 
 
                         })
 
                         obtenerPreciosPago();
-                        obtenerCantidadProductos();
+                        obtenerCantidadArticulos();
                     }
                 },
                 error: function (error) {
@@ -204,12 +204,12 @@
             jQuery.ajax({
                 url: '@Url.Action("EliminarCarrito", "Tienda")',
                 type: "POST",
-                data: JSON.stringify({ IdCarrito: json._IdCarrito, IdProducto: json._IdProducto }),
+                data: JSON.stringify({ IdCarrito: json._IdCarrito, IdProducto: json._IdArticulo }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     if (data.resultado) {
-                        card_producto.remove();
+                        card_articulo.remove();
                         obtenerPreciosPago();
                         obtenerCantidadProductos();
                         obtenerCantidad();
@@ -238,9 +238,9 @@
             $("#totalPagar").text("S/. " + total.toString());
         }
         function obtenerCantidadProductos() {
-            $("#cantidad-articulos").text(" " + $("#productos-seleccionados > div.card").length.toString() + " ");
+            $("#cantidad-articulos").text(" " + $("#articulos-seleccionados > div.card").length.toString() + " ");
 
-            if ($("#productos-seleccionados > div.card").length == 0) {
+            if ($("#articulos-seleccionados > div.card").length == 0) {
                $("#btnProcesarPago").prop("disabled", true);
             }
         }
@@ -385,7 +385,7 @@
                 $("input.input-cantidad").each(function (index) {
                     var precio = parseFloat($(this).val()) * parseFloat($(this).data("precio"));
                     detalle.push({
-                        IdProducto: parseInt($(this).data("idproducto")),
+                        IdProducto: parseInt($(this).data("idarticulo")),
                         Cantidad: parseInt($(this).val()),
                         Total: precio
                     });
@@ -395,7 +395,7 @@
 
                 var request = {
                     oCompra: {
-                        TotalProducto: $("#productos-seleccionados > div.card").length,
+                        TotalProducto: $("#articulos-seleccionados > div.card").length,
                         Total: total,
                         Contacto: $("#txtContacto").val(),
                         Telefono: $("#txtTelefono").val(),

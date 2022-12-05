@@ -1,17 +1,17 @@
 ﻿
 @{
-    ViewBag.Title = "Producto";
+    ViewBag.Title = "Articulo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb mb-4 mt-4">
     <li class="breadcrumb-item"><a href="index.html">Mantenedores</a></li>
-    <li class="breadcrumb-item active">Productos</li>
+    <li class="breadcrumb-item active">Articulos</li>
 </ol>
 
 <div class="card mb-4">
     <div class="card-header">
-        <i class="fas fa-table me-1"></i> Listado de Productos
+        <i class="fas fa-table me-1"></i> Listado de Articulos
     </div>
     <div class="card-body">
         <div class="row">
@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="exampleModalLabel">Producto</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Articulo</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -56,10 +56,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="mb-2">
-                                <img id="img_producto" height="198" width="200" class="border border-dark" />
+                                <img id="img_articulo" height="198" width="200" class="border border-dark" />
                             </div>
                             <div class="mb-2">
-                                <input class="form-control" type="file" id="imgproducto" onchange="readURL(this);">
+                                <input class="form-control" type="file" id="imgarticulo" onchange="readURL(this);">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -83,8 +83,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="mb-2">
-                                <label for="cbocategoria" class="form-label">Categoria</label>
-                                <select id="cbocategoria" class="form-select"></select>
+                                <label for="cbotienda" class="form-label">Tienda</label>
+                                <select id="cbotienda" class="form-select"></select>
                             </div>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#img_producto')
+                    $('#img_articulo')
                         .attr('src', e.target.result)
                         .width(200)
                         .height(198);
@@ -156,7 +156,7 @@
             tabladata = $('#tabla').DataTable({
                     responsive:true,
                     "ajax": {
-                        "url": '@Url.Action("ListarProducto", "Home")',
+                        "url": '@Url.Action("ListarArticulo", "Home")',
                         "type": "GET",
                         "datatype": "json"
                     },
@@ -170,7 +170,7 @@
                             }
                         },
                         {
-                            "data": "oCategoria", render: function (data) {
+                            "data": "oTienda", render: function (data) {
                                 return data.Descripcion
                             }
                         },
@@ -186,7 +186,7 @@
                             }
                         },
                         {
-                            "data": "IdProducto", "render": function (data, type, row, meta) {
+                            "data": "IdArticulo", "render": function (data, type, row, meta) {
 
                                 return $("<button>").addClass("btn btn-primary btn-editar btn-sm").append(
                                     $("<i>").addClass("fas fa-pen")
@@ -209,14 +209,14 @@
             });
 
             jQuery.ajax({
-                url: '@Url.Action("ListarCategoria", "Home")',
+                url: '@Url.Action("ListarTienda", "Home")',
                 type: "GET",
                 data: null,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     $.each(data.data, function (index, value) {
-                        $("<option>").attr({ "value": value.IdCategoria }).text(value.Descripcion).appendTo("#cbocategoria");
+                        $("<option>").attr({ "value": value.IdTienda }).text(value.Descripcion).appendTo("#cbotienda");
                     });
                 },
                 error: function (error) {
@@ -259,11 +259,11 @@
 
         function abrirModal(json) {
             $("#txtid").val(0);
-            $("#img_producto").attr({ "src": "" });
+            $("#img_articulo").attr({ "src": "" });
             $("#txtnombre").val("");
             $("#txtdescripcion").val("");
             $("#cbomarca").val($("#cbomarca option:first").val());
-            $("#cbocategoria").val($("#cbocategoria option:first").val());
+            $("#cbotienda").val($("#cbotienda option:first").val());
             $("#txtprecio").val("");
             $("#txtstock").val("");
             $("#cboEstado").val(1);
@@ -272,14 +272,14 @@
 
             if (json != null) {
                 console.log(json)
-                $("#txtid").val(json.IdProducto);
+                $("#txtid").val(json.IdArticulo);
 
 
-                $("#img_producto").attr({ "src": "data:image/" + json.extension + ";base64," + json.base64});
+                $("#img_articulo").attr({ "src": "data:image/" + json.extension + ";base64," + json.base64});
                 $("#txtnombre").val(json.Nombre);
                 $("#txtdescripcion").val(json.Descripcion);
                 $("#cbomarca").val(json.oMarca.IdMarca);
-                $("#cbocategoria").val(json.oCategoria.IdCategoria);
+                $("#cbotienda").val(json.oTienda.IdTienda);
                 $("#txtprecio").val(json.Precio);
                 $("#txtstock").val(json.Stock);
                 $("#cboEstado").val(json.Activo == true ? 1 : 0);
@@ -293,9 +293,9 @@
 
             if (confirm('¿Esta seguro de eliminar?')) {
                  jQuery.ajax({
-                        url: '@Url.Action("EliminarProducto", "Home")',
-                        type: "POST",
-                        data: JSON.stringify({ id: json.IdProducto}),
+                        url: '@Url.Action("EliminarArticulo", "Home")',
+                     type: "POST",
+                     data: JSON.stringify({ id: json.IdArticulo }),
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
@@ -321,14 +321,14 @@
 
         function Guardar() {
 
-            var ImagenSeleccionada = ($("#imgproducto"))[0].files[0];
+            var ImagenSeleccionada = ($("#imgarticulo"))[0].files[0];
 
             var objeto = {
                 IdProducto: $("#txtid").val(),
                 Nombre: $("#txtnombre").val(),
                 Descripcion: $("#txtdescripcion").val(),
                 oMarca: {IdMarca : $("#cbomarca option:selected").val()},
-                oCategoria: { IdCategoria : $("#cbocategoria option:selected").val() },
+                oCategoria: { IdCategoria : $("#cbotienda option:selected").val() },
                 Precio: $("#txtprecio").val(),
                 Stock: $("#txtstock").val(),
                 RutaImagen : "",
@@ -340,7 +340,7 @@
             request.append("objeto", JSON.stringify(objeto));
 
             jQuery.ajax({
-                url: '@Url.Action("GuardarProducto", "Home")',
+                url: '@Url.Action("GuardarArticulo", "Home")',
                 type: "POST",
                 data: request,
                 processData: false,

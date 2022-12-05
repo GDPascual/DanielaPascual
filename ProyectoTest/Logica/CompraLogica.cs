@@ -41,12 +41,12 @@ namespace ProyectoTest.Logica
                 {
                     StringBuilder query = new StringBuilder();
                     foreach (DetalleCompra dc in oCompra.oDetalleCompra) {
-                        query.AppendLine("insert into detalle_compra(IdCompra,IdProducto,Cantidad,Total) values (¡idcompra!," + dc.IdProducto +","+dc.Cantidad+","+dc.Total+")");
+                        query.AppendLine("insert into detalle_compra(IdCompra,IdArticulo,Cantidad,Total) values (¡idcompra!," + dc.IdArticulo +","+dc.Cantidad+","+dc.Total+")");
                     }
 
                     SqlCommand cmd = new SqlCommand("sp_registrarCompra", oConexion);
-                    cmd.Parameters.AddWithValue("IdUsuario", oCompra.IdUsuario);
-                    cmd.Parameters.AddWithValue("TotalProducto", oCompra.TotalProducto);
+                    cmd.Parameters.AddWithValue("IdCliente", oCompra.IdCliente);
+                    cmd.Parameters.AddWithValue("TotalArticulo", oCompra.TotalArticulo);
                     cmd.Parameters.AddWithValue("Total", oCompra.Total);
                     cmd.Parameters.AddWithValue("Contacto", oCompra.Contacto);
                     cmd.Parameters.AddWithValue("Telefono", oCompra.Telefono);

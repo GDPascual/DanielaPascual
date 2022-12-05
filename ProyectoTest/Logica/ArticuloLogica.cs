@@ -9,35 +9,35 @@ using System.Web;
 
 namespace ProyectoTest.Logica
 {
-    public class ProductoLogica
+    public class ArticuloLogica
     {
-        private static ProductoLogica _instancia = null;
+        private static ArticuloLogica _instancia = null;
 
-        public ProductoLogica()
+        public ArticuloLogica()
         {
 
         }
 
-        public static ProductoLogica Instancia
+        public static ArticuloLogica Instancia
         {
             get
             {
                 if (_instancia == null)
                 {
-                    _instancia = new ProductoLogica();
+                    _instancia = new ArticuloLogica();
                 }
 
                 return _instancia;
             }
         }
 
-        public List<Producto> Listar()
+        public List<Articulo> Listar()
         {
 
-            List<Producto> rptListaProducto = new List<Producto>();
+            List<Articulo> rptListaArticulo = new List<Articulo>();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
-                SqlCommand cmd = new SqlCommand("sp_obtenerProducto", oConexion);
+                SqlCommand cmd = new SqlCommand("sp_obtenerArticulo", oConexion);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 try
@@ -47,13 +47,13 @@ namespace ProyectoTest.Logica
 
                     while (dr.Read())
                     {
-                        rptListaProducto.Add(new Producto()
+                        rptListaArticulo.Add(new Articulo()
                         {
-                            IdProducto = Convert.ToInt32(dr["IdProducto"].ToString()),
+                            IdArticulo = Convert.ToInt32(dr["IdArticulo"].ToString()),
                             Nombre = dr["Nombre"].ToString(),
                             Descripcion = dr["Descripcion"].ToString(),
                             oMarca = new Marca() { IdMarca = Convert.ToInt32(dr["IdMarca"].ToString()),Descripcion = dr["DescripcionMarca"].ToString() },
-                            oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(dr["IdCategoria"].ToString()), Descripcion = dr["DescripcionCategoria"].ToString() },
+                            oTienda = new Tienda() { IdTienda = Convert.ToInt32(dr["IdTienda"].ToString()), Descripcion = dr["DescripcionTienda"].ToString() },
                             Precio = Convert.ToDecimal(dr["Precio"].ToString(), new CultureInfo("es-PE")),
                             Stock = Convert.ToInt32(dr["Stock"].ToString()),
                             RutaImagen = dr["RutaImagen"].ToString(),
@@ -62,34 +62,34 @@ namespace ProyectoTest.Logica
                     }
                     dr.Close();
 
-                    return rptListaProducto;
+                    return rptListaArticulo;
 
                 }
                 catch (Exception ex)
                 {
-                    rptListaProducto = null;
-                    return rptListaProducto;
+                    rptListaArticulo = null;
+                    return rptListaArticulo;
                 }
             }
         }
 
 
 
-        public int Registrar(Producto oProducto)
+        public int Registrar(Articulo oArticulo)
         {
             int respuesta = 0;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_registrarProducto", oConexion);
-                    cmd.Parameters.AddWithValue("Nombre", oProducto.Nombre );
-                    cmd.Parameters.AddWithValue("Descripcion", oProducto.Descripcion );
-                    cmd.Parameters.AddWithValue("IdMarca", oProducto.oMarca.IdMarca );
-                    cmd.Parameters.AddWithValue("IdCategoria", oProducto.oCategoria.IdCategoria);
-                    cmd.Parameters.AddWithValue("Precio", oProducto.Precio );
-                    cmd.Parameters.AddWithValue("Stock", oProducto.Stock );
-                    cmd.Parameters.AddWithValue("RutaImagen",oProducto.RutaImagen );
+                    SqlCommand cmd = new SqlCommand("sp_registrarArticulo", oConexion);
+                    cmd.Parameters.AddWithValue("Nombre", oArticulo.Nombre );
+                    cmd.Parameters.AddWithValue("Descripcion", oArticulo.Descripcion );
+                    cmd.Parameters.AddWithValue("IdMarca", oArticulo.oMarca.IdMarca );
+                    cmd.Parameters.AddWithValue("IdTienda", oArticulo.oTienda.IdTienda);
+                    cmd.Parameters.AddWithValue("Precio", oArticulo.Precio );
+                    cmd.Parameters.AddWithValue("Stock", oArticulo.Stock );
+                    cmd.Parameters.AddWithValue("RutaImagen", oArticulo.RutaImagen );
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -108,22 +108,22 @@ namespace ProyectoTest.Logica
             return respuesta;
         }
 
-        public bool Modificar(Producto oProducto)
+        public bool Modificar(Articulo oArticulo)
         {
             bool respuesta = false;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_editarProducto", oConexion);
-                    cmd.Parameters.AddWithValue("IdProducto", oProducto.IdProducto);
-                    cmd.Parameters.AddWithValue("Nombre", oProducto.Nombre);
-                    cmd.Parameters.AddWithValue("Descripcion", oProducto.Descripcion);
-                    cmd.Parameters.AddWithValue("IdMarca", oProducto.oMarca.IdMarca);
-                    cmd.Parameters.AddWithValue("IdCategoria", oProducto.oCategoria.IdCategoria);
-                    cmd.Parameters.AddWithValue("Precio", oProducto.Precio);
-                    cmd.Parameters.AddWithValue("Stock", oProducto.Stock);
-                    cmd.Parameters.AddWithValue("Activo", oProducto.Activo);
+                    SqlCommand cmd = new SqlCommand("sp_editarArticulo", oConexion);
+                    cmd.Parameters.AddWithValue("IdArticulo", oArticulo.IdArticulo);
+                    cmd.Parameters.AddWithValue("Nombre", oArticulo.Nombre);
+                    cmd.Parameters.AddWithValue("Descripcion", oArticulo.Descripcion);
+                    cmd.Parameters.AddWithValue("IdMarca", oArticulo.oMarca.IdMarca);
+                    cmd.Parameters.AddWithValue("IdTienda", oArticulo.oTienda.IdTienda);
+                    cmd.Parameters.AddWithValue("Precio", oArticulo.Precio);
+                    cmd.Parameters.AddWithValue("Stock", oArticulo.Stock);
+                    cmd.Parameters.AddWithValue("Activo", oArticulo.Activo);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -143,7 +143,7 @@ namespace ProyectoTest.Logica
         }
         
 
-        public bool ActualizarRutaImagen(Producto oProducto)
+        public bool ActualizarRutaImagen(Articulo oArticulo)
         {
             bool respuesta = true;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
@@ -151,8 +151,8 @@ namespace ProyectoTest.Logica
                 try
                 {
                     SqlCommand cmd = new SqlCommand("sp_actualizarRutaImagen", oConexion);
-                    cmd.Parameters.AddWithValue("IdProducto", oProducto.IdProducto);
-                    cmd.Parameters.AddWithValue("RutaImagen", oProducto.RutaImagen);
+                    cmd.Parameters.AddWithValue("IdArticulo", oArticulo.IdArticulo);
+                    cmd.Parameters.AddWithValue("RutaImagen", oArticulo.RutaImagen);
                     cmd.CommandType = CommandType.StoredProcedure;
                     oConexion.Open();
                     cmd.ExecuteNonQuery();
@@ -172,7 +172,7 @@ namespace ProyectoTest.Logica
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("delete from Producto where idProducto = @id", oConexion);
+                    SqlCommand cmd = new SqlCommand("delete from ARTICULO where idarticulo = @id", oConexion);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.CommandType = CommandType.Text;
 

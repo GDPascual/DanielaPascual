@@ -12,39 +12,39 @@ namespace ProyectoTest.Controllers
 {
     public class TiendaController : Controller
     {
-        private static Usuario oUsuario;
+        private static Cliente oCliente;
         //VISTA
         public ActionResult Index()
         {
-            if (Session["Usuario"] == null)
+            if (Session["Cliente"] == null)
                 return RedirectToAction("Index", "Login");
             else
-                oUsuario = (Usuario)Session["Usuario"];
+                oCliente = (Cliente)Session["Cliente"];
 
             return View();
         }
 
         //VISTA
-        public ActionResult Producto(int idproducto = 0)
+        public ActionResult Articulo(int idarticulo = 0)
         {
-            if (Session["Usuario"] == null)
+            if (Session["Cliente"] == null)
                 return RedirectToAction("Index", "Login");
             else
-                oUsuario = (Usuario)Session["Usuario"];
+                oCliente = (Cliente)Session["Cliente"];
 
-            Producto oProducto = new Producto();
-            List<Producto> oLista = new List<Producto>();
+            Articulo oArticulo = new Articulo();
+            List<Articulo> oLista = new List<Articulo>();
 
-            oLista = ProductoLogica.Instancia.Listar();
-            oProducto = (from o in oLista
-                      where o.IdProducto == idproducto
-                      select new Producto()
+            oLista = ArticuloLogica.Instancia.Listar();
+            oArticulo = (from o in oLista
+                      where o.IdArticulo == idarticulo
+                      select new Articulo()
                       {
-                          IdProducto = o.IdProducto,
+                          IdArticulo = o.IdArticulo,
                           Nombre = o.Nombre,
                           Descripcion = o.Descripcion,
                           oMarca = o.oMarca,
-                          oCategoria = o.oCategoria,
+                          oTienda = o.oTienda,
                           Precio = o.Precio,
                           Stock = o.Stock,
                           RutaImagen = o.RutaImagen,
@@ -53,16 +53,16 @@ namespace ProyectoTest.Controllers
                           Activo = o.Activo
                       }).FirstOrDefault();
 
-            return View(oProducto);
+            return View(oArticulo);
         }
 
         //VISTA
         public ActionResult Carrito()
         {
-            if (Session["Usuario"] == null)
+            if (Session["Cliente"] == null)
                 return RedirectToAction("Index", "Login");
             else
-                oUsuario = (Usuario)Session["Usuario"];
+                oCliente = (Cliente)Session["Cliente"];
 
             return View();
         }
@@ -70,10 +70,10 @@ namespace ProyectoTest.Controllers
         //VISTA
         public ActionResult Compras()
         {
-            if (Session["Usuario"] == null)
+            if (Session["Cliente"] == null)
                 return RedirectToAction("Index", "Login");
             else
-                oUsuario = (Usuario)Session["Usuario"];
+                oCliente = (Cliente)Session["Cliente"];
 
             return View();
         }
@@ -84,19 +84,19 @@ namespace ProyectoTest.Controllers
 
 
         [HttpPost]
-        public JsonResult ListarProducto(int idcategoria = 0)
+        public JsonResult ListarArticulo(int idtienda = 0)
         {
-            List<Producto> oLista = new List<Producto>();
+            List<Articulo> oLista = new List<Articulo>();
 
-            oLista = ProductoLogica.Instancia.Listar();
+            oLista = ArticuloLogica.Instancia.Listar();
             oLista = (from o in oLista
-                      select new Producto()
+                      select new Articulo()
                       {
-                          IdProducto = o.IdProducto,
+                          IdArticulo = o.IdArticulo,
                           Nombre = o.Nombre,
                           Descripcion = o.Descripcion,
                           oMarca = o.oMarca,
-                          oCategoria = o.oCategoria,
+                          oTienda = o.oTienda,
                           Precio = o.Precio,
                           Stock = o.Stock,
                           RutaImagen = o.RutaImagen,
@@ -105,25 +105,25 @@ namespace ProyectoTest.Controllers
                           Activo = o.Activo
                       }).ToList();
 
-            if (idcategoria != 0){
-                oLista = oLista.Where(x => x.oCategoria.IdCategoria == idcategoria).ToList() ;
+            if (idtienda != 0){
+                oLista = oLista.Where(x => x.oTienda.IdTienda == idtienda).ToList() ;
             }
 
             return Json(new { data = oLista }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public JsonResult ListarCategoria()
+        public JsonResult ListarTienda()
         {
-            List<Categoria> oLista = new List<Categoria>();
-            oLista = CategoriaLogica.Instancia.Listar();
+            List<Tienda> oLista = new List<Tienda>();
+            oLista = TiendaLogica.Instancia.Listar();
             return Json(new { data = oLista }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public JsonResult InsertarCarrito(Carrito oCarrito)
         {
-            oCarrito.oUsuario = new Usuario() { IdUsuario = oUsuario.IdUsuario };
+            oCarrito.oCliente = new Cliente() { IdCliente = oCliente.IdCliente };
             int _respuesta = 0;
             _respuesta = CarritoLogica.Instancia.Registrar(oCarrito) ;
             return Json(new { respuesta = _respuesta }, JsonRequestBehavior.AllowGet);
@@ -134,7 +134,7 @@ namespace ProyectoTest.Controllers
         public JsonResult CantidadCarrito()
         {
             int _respuesta = 0;
-            _respuesta = CarritoLogica.Instancia.Cantidad(oUsuario.IdUsuario);
+            _respuesta = CarritoLogica.Instancia.Cantidad(oCliente.IdCliente);
             return Json(new { respuesta = _respuesta }, JsonRequestBehavior.AllowGet);
         }
 
@@ -143,22 +143,22 @@ namespace ProyectoTest.Controllers
         public JsonResult ObtenerCarrito()
         {
             List<Carrito> oLista = new List<Carrito>();
-            oLista = CarritoLogica.Instancia.Obtener(oUsuario.IdUsuario);
+            oLista = CarritoLogica.Instancia.Obtener(oCliente.IdCliente);
 
             if (oLista.Count != 0) {
                 oLista = (from d in oLista
                           select new Carrito()
                           {
                               IdCarrito = d.IdCarrito,
-                              oProducto = new Producto()
+                              OArticulo = new Articulo()
                               {
-                                  IdProducto = d.oProducto.IdProducto,
-                                  Nombre = d.oProducto.Nombre,
-                                  oMarca = new Marca() { Descripcion = d.oProducto.oMarca.Descripcion },
-                                  Precio = d.oProducto.Precio,
-                                  RutaImagen = d.oProducto.RutaImagen,
-                                  base64 = utilidades.convertirBase64(Server.MapPath(d.oProducto.RutaImagen)),
-                                  extension = Path.GetExtension(d.oProducto.RutaImagen).Replace(".", ""),
+                                  IdArticulo = d.OArticulo.IdArticulo,
+                                  Nombre = d.OArticulo.Nombre,
+                                  oMarca = new Marca() { Descripcion = d.OArticulo.oMarca.Descripcion },
+                                  Precio = d.OArticulo.Precio,
+                                  RutaImagen = d.OArticulo.RutaImagen,
+                                  base64 = utilidades.convertirBase64(Server.MapPath(d.OArticulo.RutaImagen)),
+                                  extension = Path.GetExtension(d.OArticulo.RutaImagen).Replace(".", ""),
                               }
                           }).ToList();
             }
@@ -210,7 +210,7 @@ namespace ProyectoTest.Controllers
         {
             bool respuesta = false;
 
-            oCompra.IdUsuario = oUsuario.IdUsuario;
+            oCompra.IdCliente = oCliente.IdCliente;
             respuesta = CompraLogica.Instancia.Registrar(oCompra);
             return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
         }
@@ -221,7 +221,7 @@ namespace ProyectoTest.Controllers
         {
             List<Compra> oLista = new List<Compra>();
 
-            oLista = CarritoLogica.Instancia.ObtenerCompra(oUsuario.IdUsuario);
+            oLista = CarritoLogica.Instancia.ObtenerCompra(oCliente.IdCliente);
 
             oLista = (from c in oLista
                       select new Compra()
@@ -230,12 +230,12 @@ namespace ProyectoTest.Controllers
                           FechaTexto = c.FechaTexto,
                           oDetalleCompra = (from dc in c.oDetalleCompra
                                             select new DetalleCompra() {
-                                                oProducto = new Producto() {
-                                                    oMarca = new Marca() {Descripcion = dc.oProducto.oMarca.Descripcion },
-                                                    Nombre = dc.oProducto.Nombre,
-                                                    RutaImagen = dc.oProducto.RutaImagen,
-                                                    base64 = utilidades.convertirBase64(Server.MapPath(dc.oProducto.RutaImagen)),
-                                                    extension = Path.GetExtension(dc.oProducto.RutaImagen).Replace(".", ""),
+                                                oArticulo = new Articulo() {
+                                                    oMarca = new Marca() {Descripcion = dc.oArticulo.oMarca.Descripcion },
+                                                    Nombre = dc.oArticulo.Nombre,
+                                                    RutaImagen = dc.oArticulo.RutaImagen,
+                                                    base64 = utilidades.convertirBase64(Server.MapPath(dc.oArticulo.RutaImagen)),
+                                                    extension = Path.GetExtension(dc.oArticulo.RutaImagen).Replace(".", ""),
                                                 },
                                                 Total = dc.Total,
                                                 Cantidad = dc.Cantidad

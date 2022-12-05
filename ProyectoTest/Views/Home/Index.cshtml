@@ -11,12 +11,12 @@
         <div class="card bg-primary text-white mb-4">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
-                    <div>Total Productos</div>
-                    <div id="total-productos">40</div>
+                    <div>Total Articulos</div>
+                    <div id="total-articulos">40</div>
                 </div>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="@Url.Action("Producto","Home")">Ver Detalles</a>
+                <a class="small text-white stretched-link" href="@Url.Action("Articulo","Home")">Ver Detalles</a>
                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
@@ -39,12 +39,12 @@
         <div class="card bg-success text-white mb-4">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
-                    <div>Total Categorias</div>
-                    <div id="total-categorias">34</div>
+                    <div>Total Tiendas</div>
+                    <div id="total-tiendas">34</div>
                 </div>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="@Url.Action("Categoria","Home")">Ver Detalles</a>
+                <a class="small text-white stretched-link" href="@Url.Action("Tienda","Home")">Ver Detalles</a>
                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
@@ -55,7 +55,7 @@
     <script>
         $(document).ready(function () {
             jQuery.ajax({
-                url: '@Url.Action("ListarProducto", "Home")',
+                url: '@Url.Action("ListarArticulo", "Home")',
                 type: "GET",
                 data: null,
                 dataType: "json",
@@ -63,7 +63,7 @@
                 success: function (data) {
                   
                     if (data.data != null) {
-                        $("#total-productos").text(data.data.length);
+                        $("#total-articulos").text(data.data.length);
                     }
                 },
                 error: function (error) {
@@ -94,14 +94,14 @@
             });
 
              jQuery.ajax({
-                url: '@Url.Action("ListarCategoria", "Home")',
+                url: '@Url.Action("ListarTienda", "Home")',
                 type: "GET",
                 data: null,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     if (data.data != null) {
-                        $("#total-categorias").text(data.data.length);
+                        $("#total-tiendas").text(data.data.length);
                     }
                 },
                 error: function (error) {

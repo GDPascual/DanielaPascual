@@ -11,36 +11,36 @@ using System.Web;
 
 namespace ProyectoTest.Logica
 {
-    public class UsuarioLogica
+    public class ClienteLogica
     {
-        private static UsuarioLogica _instancia = null;
+        private static ClienteLogica _instancia = null;
 
-        public UsuarioLogica()
+        public ClienteLogica()
         {
 
         }
 
-        public static UsuarioLogica Instancia
+        public static ClienteLogica Instancia
         {
             get
             {
                 if (_instancia == null)
                 {
-                    _instancia = new UsuarioLogica();
+                    _instancia = new ClienteLogica();
                 }
 
                 return _instancia;
             }
         }
 
-        public Usuario Obtener(string _correo, string _contrasena)
+        public Cliente Obtener(string _correo, string _contrasena)
         {
-            Usuario objeto = null;
+            Cliente objeto = null;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_obtenerUsuario", oConexion);
+                    SqlCommand cmd = new SqlCommand("sp_obtenerCliente", oConexion);
                     cmd.Parameters.AddWithValue("Correo", _correo);
                     cmd.Parameters.AddWithValue("Contrasena", _contrasena);
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -49,9 +49,9 @@ namespace ProyectoTest.Logica
 
                     using (SqlDataReader dr = cmd.ExecuteReader()) {
                         while (dr.Read()) {
-                            objeto = new Usuario()
+                            objeto = new Cliente()
                             {
-                                IdUsuario = Convert.ToInt32(dr["IdUsuario"].ToString()),
+                                IdCliente = Convert.ToInt32(dr["IdCliente"].ToString()),
                                 Nombres = dr["Nombres"].ToString(),
                                 Apellidos = dr["Apellidos"].ToString(),
                                 Correo = dr["Correo"].ToString(),
@@ -71,19 +71,19 @@ namespace ProyectoTest.Logica
             return objeto;
         }
 
-        public int Registrar(Usuario oUsuario)
+        public int Registrar(Cliente oCliente)
         {
             int respuesta = 0;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_registrarUsuario", oConexion);
-                    cmd.Parameters.AddWithValue("Nombres", oUsuario.Nombres);
-                    cmd.Parameters.AddWithValue("Apellidos", oUsuario.Apellidos);
-                    cmd.Parameters.AddWithValue("Correo", oUsuario.Correo);
-                    cmd.Parameters.AddWithValue("Contrasena", oUsuario.Contrasena);
-                    cmd.Parameters.AddWithValue("EsAdministrador", oUsuario.EsAdministrador);
+                    SqlCommand cmd = new SqlCommand("sp_registrarCliente", oConexion);
+                    cmd.Parameters.AddWithValue("Nombres", oCliente.Nombres);
+                    cmd.Parameters.AddWithValue("Apellidos", oCliente.Apellidos);
+                    cmd.Parameters.AddWithValue("Correo", oCliente.Correo);
+                    cmd.Parameters.AddWithValue("Contrasena", oCliente.Contrasena);
+                    cmd.Parameters.AddWithValue("EsAdministrador", oCliente.EsAdministrador);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 

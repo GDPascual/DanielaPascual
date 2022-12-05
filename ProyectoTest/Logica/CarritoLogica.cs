@@ -42,8 +42,8 @@ namespace ProyectoTest.Logica
                 try
                 {
                     SqlCommand cmd = new SqlCommand("sp_InsertarCarrito", oConexion);
-                    cmd.Parameters.AddWithValue("IdUsuario", oCarrito.oUsuario.IdUsuario);
-                    cmd.Parameters.AddWithValue("IdProducto", oCarrito.oProducto.IdProducto);
+                    cmd.Parameters.AddWithValue("IdCliente", oCarrito.oCliente.IdCliente);
+                    cmd.Parameters.AddWithValue("IdArticulo", oCarrito.OArticulo.IdArticulo);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -61,15 +61,15 @@ namespace ProyectoTest.Logica
         }
 
 
-        public int Cantidad(int idusuario)
+        public int Cantidad(int idcliente)
         {
             int respuesta = 0;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("select count(*) from carrito where idusuario = @idusuario", oConexion);
-                    cmd.Parameters.AddWithValue("@idusuario", idusuario);
+                    SqlCommand cmd = new SqlCommand("select count(*) from carrito where idcliente = @idcliente", oConexion);
+                    cmd.Parameters.AddWithValue("@idcliente", idcliente);
                     cmd.CommandType = CommandType.Text;
 
                     oConexion.Open();
@@ -84,7 +84,7 @@ namespace ProyectoTest.Logica
             return respuesta;
         }
 
-        public List<Carrito> Obtener(int _idusuario)
+        public List<Carrito> Obtener(int _idcliente)
         {
             List<Carrito> lst = new List<Carrito>();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
@@ -92,7 +92,7 @@ namespace ProyectoTest.Logica
                 try
                 {
                     SqlCommand cmd = new SqlCommand("sp_ObtenerCarrito", oConexion);
-                    cmd.Parameters.AddWithValue("IdUsuario", _idusuario);
+                    cmd.Parameters.AddWithValue("IdCliente", _idcliente);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     oConexion.Open();
@@ -104,8 +104,8 @@ namespace ProyectoTest.Logica
                             lst.Add(new Carrito() {
 
                                 IdCarrito = Convert.ToInt32(dr["IdCarrito"].ToString()),
-                                oProducto = new Producto() {
-                                    IdProducto = Convert.ToInt32(dr["IdProducto"].ToString()),
+                                OArticulo = new Articulo() {
+                                    IdArticulo = Convert.ToInt32(dr["IdArticulo"].ToString()),
                                     Nombre = dr["Nombre"].ToString(),
                                     oMarca = new Marca() { Descripcion = dr["Descripcion"].ToString() },
                                     Precio = Convert.ToDecimal(dr["Precio"].ToString(), new CultureInfo("es-PE")),
@@ -125,7 +125,7 @@ namespace ProyectoTest.Logica
             return lst;
         }
 
-        public bool Eliminar(string IdCarrito, string IdProducto) {
+        public bool Eliminar(string IdCarrito, string IdArticulo) {
 
             bool respuesta = true;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
@@ -134,11 +134,11 @@ namespace ProyectoTest.Logica
                 {
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("delete from carrito where idcarrito = @idcarrito");
-                    query.AppendLine("update PRODUCTO set Stock = Stock + 1 where IdProducto = @idproducto");
+                    query.AppendLine("update ARTICULO set Stock = Stock + 1 where IdArticulo = @idarticulo");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), oConexion);
                     cmd.Parameters.AddWithValue("@idcarrito", IdCarrito);
-                    cmd.Parameters.AddWithValue("@idproducto", IdProducto);
+                    cmd.Parameters.AddWithValue("@idarticulo", IdArticulo);
                     cmd.CommandType = CommandType.Text;
 
                     oConexion.Open();
@@ -153,13 +153,13 @@ namespace ProyectoTest.Logica
             return respuesta;
         }
 
-        public List<Compra> ObtenerCompra(int IdUsuario)
+        public List<Compra> ObtenerCompra(int IdCliente)
         {
             List<Compra> rptDetalleCompra = new List<Compra>();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 SqlCommand cmd = new SqlCommand("sp_ObtenerCompra", oConexion);
-                cmd.Parameters.AddWithValue("@IdUsuario", IdUsuario);
+                cmd.Parameters.AddWithValue("@IdCliente", IdCliente);
                 cmd.CommandType = CommandType.StoredProcedure;
 
 
@@ -178,9 +178,9 @@ namespace ProyectoTest.Logica
                                                     {
                                                         Total = Convert.ToDecimal(c.Element("Total").Value,new CultureInfo("es-PE")),
                                                         FechaTexto = c.Element("Fecha").Value,
-                                                        oDetalleCompra = (from d in c.Element("DETALLE_PRODUCTO").Elements("PRODUCTO")
+                                                        oDetalleCompra = (from d in c.Element("DETALLE_ARTICULO").Elements("ARTICULO")
                                                                           select new DetalleCompra() {
-                                                                              oProducto = new Producto() {
+                                                                              oArticulo= new Articulo() {
                                                                                   oMarca = new Marca() { Descripcion = d.Element("Descripcion").Value  },
                                                                                   Nombre = d.Element("Nombre").Value,
                                                                                   RutaImagen = d.Element("RutaImagen").Value

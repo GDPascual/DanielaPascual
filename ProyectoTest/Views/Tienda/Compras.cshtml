@@ -65,8 +65,8 @@
                             var accordion_body = $("<div>").addClass("accordion-body");
                             $.each(v.oDetalleCompra, function (x, dc) {
                                 var d_flex = $("<div>").addClass("d-flex flex-row border p-2").append(
-                                                $("<img>").attr({ "src": "data:image/" + dc.oProducto.extension + ";base64," + dc.oProducto.base64,"width":"50"}),
-                                                $("<div>").addClass("p-2 bd-highlight").text(dc.oProducto.Nombre),
+                                    $("<img>").attr({ "src": "data:image/" + dc.oArticulo.extension + ";base64," + dc.oArticulo.base64, "width": "50" }),
+                                    $("<div>").addClass("p-2 bd-highlight").text(dc.oArticulo.Nombre),
                                                 $("<div>").addClass("p-2 bd-highlight ms-auto").text("Cantidad: " + dc.Cantidad),
                                                 $("<div>").addClass("p-2 bd-highlight").text("Total: S/. " + dc.Total)
                                             )

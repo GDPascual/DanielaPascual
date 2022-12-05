@@ -16,11 +16,11 @@
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="#" style="width:180px !important">Carrito Compras</a>
             <!-- Sidebar Toggle-->
-            <button class="btn btn-dark btn-ver-categoria" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i> Ver Categorias</button>
+            <button class="btn btn-dark btn-ver-categoria" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i> Ver Tiendas</button>
 
             <!-- Navbar-->
             @{
-                if (((ProyectoTest.Models.Usuario)Session["Usuario"]).EsAdministrador == false)
+                if (((ProyectoTest.Models.Cliente)Session["Cliente"]).EsAdministrador == false)
                 {
                     <form action="@Url.Action("Carrito","Tienda")" method="post" class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                         <button class="btn btn-close-white" type="submit">
@@ -102,7 +102,7 @@
 
                 var request = {
                     oCarrito: {
-                        oProducto: { IdProducto: $(this).data("idproducto")  }
+                        oArticulo: { IdArticulo: $(this).data("idarticulo")  }
                     }
                 }
 

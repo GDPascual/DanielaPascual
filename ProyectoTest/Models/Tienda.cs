@@ -5,9 +5,9 @@ using System.Web;
 
 namespace ProyectoTest.Models
 {
-    public class Categoria
+    public class Tienda
     {
-        public int IdCategoria { get; set; }
+        public int IdTienda { get; set; }
         public string Descripcion { get; set; }
         public bool Activo { get; set; }
     }

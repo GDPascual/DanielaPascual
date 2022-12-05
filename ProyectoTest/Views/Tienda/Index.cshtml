@@ -8,7 +8,7 @@
     <div class="bg-secondary py-3">
         <div class="container my-3">
             <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Compra con estilo </h1>
+                <h1 class="display-4 fw-bolder">Compra  </h1>
                 <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
             </div>
         </div>
@@ -16,7 +16,7 @@
 
     <div class="py-2">
         <div class="container px-2 px-lg-2 mt-5">
-            <div id="catalogo-productos" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div id="catalogo-articulos" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
             </div>
         </div>
@@ -29,11 +29,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Seleccione una Categoría</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Seleccione una Opcion</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row row-categoria">
+                <div class="row row-tienda">
                 </div>
 
             </div>
@@ -48,25 +48,25 @@
 
     <script>
 
-        $(".btn-ver-categoria").click(function () {
+        $(".btn-ver-tienda").click(function () {
             jQuery.ajax({
-                url: '@Url.Action("ListarCategoria", "Tienda")',
+                url: '@Url.Action("ListarTienda", "Tienda")',
                 type: "GET",
                 data: null,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    $(".row-categoria").html("");
+                    $(".row-tienda").html("");
                     $(".modal-body").LoadingOverlay("hide");
                     if (data.data != null) {
                         $("<div>").addClass("col-4").append(
-                            $("<button>").addClass("btn btn-outline-primary btn-categoria m-1 w-100").text("Ver Todos").attr({ "onclick":"listarProductos(0)"})
-                        ).appendTo(".row-categoria")
+                            $("<button>").addClass("btn btn-outline-primary btn-tienda m-1 w-100").text("Ver Todos").attr({ "onclick":"listarArticulo(0)"})
+                        ).appendTo(".row-tienda")
 
                         $.each(data.data, function (i, item) {
                             $("<div>").addClass("col-4").append(
-                                $("<button>").addClass("btn btn-outline-primary btn-categoria m-1 w-100").text(item.Descripcion).attr({ "onclick": "listarProductos("+ item.IdCategoria +")" })
-                            ).appendTo(".row-categoria")
+                                $("<button>").addClass("btn btn-outline-primary btn-tienda m-1 w-100").text(item.Descripcion).attr({ "onclick": "listarArticulo("+ item.IdTienda +")" })
+                            ).appendTo(".row-tienda")
                         });
                     }
                 },
@@ -87,29 +87,29 @@
 
         $(document).on('click', '.btn-detalle', function (event) {
             var json = $(this).data("elemento")
-            window.location.href = "@Url.Action("Producto", "Tienda")" + "?idproducto=" + json.IdProducto;
+            window.location.href = "@Url.Action("Articulo", "Tienda")" + "?idarticulo=" + json.IdArticulo;
         });
 
-        $(document).on('click', '.btn-categoria', function (event) {
+        $(document).on('click', '.btn-tienda', function (event) {
             $('#exampleModal').modal('hide');
         });
 
 
-        function listarProductos(_idcategoria) {
+        function listarArticulos(_idtienda) {
             jQuery.ajax({
-                url: '@Url.Action("ListarProducto", "Tienda")',
+                url: '@Url.Action("ListarArticulo", "Tienda")',
                 type: "POST",
-                data: JSON.stringify({ idcategoria: _idcategoria}),
+                data: JSON.stringify({ idtienda: _idtienda }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    $("#catalogo-productos").html("");
+                    $("#catalogo-articulos").html("");
 
-                    $("#catalogo-productos").LoadingOverlay("hide");
+                    $("#catalogo-articulos").LoadingOverlay("hide");
                     if (data.data != null) {
 
                         $.each(data.data, function (i, item) {
-                            //catalogo-productos
+                            //catalogo-articulos
                             $("<div>").addClass("col mb-5").append(
                                 $("<div>").addClass("card h-100").append(
                                     $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + item.extension + ";base64," + item.base64 }),
@@ -125,8 +125,8 @@
                                         $("<div>").addClass("d-grid d-md-grid gap-2 d-md-block align-items-center text-center").append(
                                             $("<button>").addClass("btn btn-outline-dark mt-auto btn-detalle").text("Ver Detalle").attr({ "data-elemento": JSON.stringify(item) }),
                                            @{
-                                               if (((ProyectoTest.Models.Usuario)Session["Usuario"]).EsAdministrador == false) {
-                                                    @:$("<button>").addClass("btn btn-outline-dark mt-auto btn-agregar-carrito").data("idproducto", item.IdProducto).text("Agregar al carrito")
+                                               if (((ProyectoTest.Models.Cliente)Session["Cliente"]).EsAdministrador == false) {
+                                                    @:$("<button>").addClass("btn btn-outline-dark mt-auto btn-agregar-carrito").data("idarticulo", item.IdArticulo).text("Agregar al carrito")
                                                }
                                            }
 
@@ -134,7 +134,7 @@
                                     )
                                 )
 
-                            ).appendTo("#catalogo-productos");
+                            ).appendTo("#catalogo-articulos");
                         });
                     }
                 },
@@ -142,7 +142,7 @@
                     console.log(error)
                 },
                 beforeSend: function () {
-                    $("#catalogo-productos").LoadingOverlay("show");
+                    $("#catalogo-articulos").LoadingOverlay("show");
                 },
             });
         }

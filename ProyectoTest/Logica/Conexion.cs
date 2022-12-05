@@ -7,6 +7,7 @@ namespace ProyectoTest.Logica
 {
     public class Conexion
     {
-        public static string CN = "Data Source=DESKTOP-KPTVHSR\\MSSQLSERVER01;Initial Catalog=DB_CARRITO;Integrated Security=True";
+        //public static string CN = "Data Source=.;Initial Catalog=CARRITO;User ID=sa;Password=***********";
+        public static string CN =  "Data Source=.;Initial Catalog=CARRITO;Integrated Security=True";
     }
 }

@@ -5,9 +5,9 @@ using System.Web;
 
 namespace ProyectoTest.Models
 {
-    public class Usuario
+    public class Cliente
     {
-        public int IdUsuario { get; set; }
+        public int IdCliente { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Correo { get; set; }
