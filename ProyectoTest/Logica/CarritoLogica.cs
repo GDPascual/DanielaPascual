@@ -47,7 +47,7 @@ namespace ProyectoTest.Logica
                 {
                     SqlCommand cmd = new SqlCommand("sp_InsertarCarrito", oConexion);
                     cmd.Parameters.AddWithValue("IdCliente", oCarrito.oCliente.IdCliente);
-                    cmd.Parameters.AddWithValue("IdArticulo", oCarrito.OArticulo.IdArticulo);
+                    cmd.Parameters.AddWithValue("IdArticulo", oCarrito.oArticulo.IdArticulo);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -108,7 +108,7 @@ namespace ProyectoTest.Logica
                             lst.Add(new Carrito() {
 
                                 IdCarrito = Convert.ToInt32(dr["IdCarrito"].ToString()),
-                                OArticulo = new Articulo() {
+                                oArticulo = new Articulo() {
                                     IdArticulo = Convert.ToInt32(dr["IdArticulo"].ToString()),
                                     Nombre = dr["Nombre"].ToString(),
                                     oMarca = new Marca() { Descripcion = dr["Descripcion"].ToString() },

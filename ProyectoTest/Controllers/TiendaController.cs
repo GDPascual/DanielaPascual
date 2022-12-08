@@ -44,7 +44,7 @@ namespace ProyectoTest.Controllers
                           Nombre = o.Nombre,
                           Descripcion = o.Descripcion,
                           oMarca = o.oMarca,
-                          oTienda = o.oTienda,
+                          oCategoria = o.oCategoria,
                           Precio = o.Precio,
                           Stock = o.Stock,
                           RutaImagen = o.RutaImagen,
@@ -84,7 +84,7 @@ namespace ProyectoTest.Controllers
 
 
         [HttpPost]
-        public JsonResult ListarArticulo(int idtienda = 0)
+        public JsonResult ListarArticulo(int idcategoria = 0)
         {
             List<Articulo> oLista = new List<Articulo>();
 
@@ -96,7 +96,7 @@ namespace ProyectoTest.Controllers
                           Nombre = o.Nombre,
                           Descripcion = o.Descripcion,
                           oMarca = o.oMarca,
-                          oTienda = o.oTienda,
+                          oCategoria = o.oCategoria,
                           Precio = o.Precio,
                           Stock = o.Stock,
                           RutaImagen = o.RutaImagen,
@@ -105,18 +105,18 @@ namespace ProyectoTest.Controllers
                           Activo = o.Activo
                       }).ToList();
 
-            if (idtienda != 0){
-                oLista = oLista.Where(x => x.oTienda.IdTienda == idtienda).ToList() ;
+            if (idcategoria != 0){
+                oLista = oLista.Where(x => x.oCategoria.IdCategoria == idcategoria).ToList() ;
             }
 
             return Json(new { data = oLista }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public JsonResult ListarTienda()
+        public JsonResult ListarCategoria()
         {
-            List<Tienda> oLista = new List<Tienda>();
-            oLista = TiendaLogica.Instancia.Listar();
+            List<Categoria> oLista = new List<Categoria>();
+            oLista = CategoriaLogica.Instancia.Listar();
             return Json(new { data = oLista }, JsonRequestBehavior.AllowGet);
         }
 
@@ -150,15 +150,15 @@ namespace ProyectoTest.Controllers
                           select new Carrito()
                           {
                               IdCarrito = d.IdCarrito,
-                              OArticulo = new Articulo()
+                              oArticulo = new Articulo()
                               {
-                                  IdArticulo = d.OArticulo.IdArticulo,
-                                  Nombre = d.OArticulo.Nombre,
-                                  oMarca = new Marca() { Descripcion = d.OArticulo.oMarca.Descripcion },
-                                  Precio = d.OArticulo.Precio,
-                                  RutaImagen = d.OArticulo.RutaImagen,
-                                  base64 = utilidades.convertirBase64(Server.MapPath(d.OArticulo.RutaImagen)),
-                                  extension = Path.GetExtension(d.OArticulo.RutaImagen).Replace(".", ""),
+                                  IdArticulo = d.oArticulo.IdArticulo,
+                                  Nombre = d.oArticulo.Nombre,
+                                  oMarca = new Marca() { Descripcion = d.oArticulo.oMarca.Descripcion },
+                                  Precio = d.oArticulo.Precio,
+                                  RutaImagen = d.oArticulo.RutaImagen,
+                                  base64 = utilidades.convertirBase64(Server.MapPath(d.oArticulo.RutaImagen)),
+                                  extension = Path.GetExtension(d.oArticulo.RutaImagen).Replace(".", ""),
                               }
                           }).ToList();
             }
@@ -168,10 +168,10 @@ namespace ProyectoTest.Controllers
         }
 
         [HttpPost]
-        public JsonResult EliminarCarrito(string IdCarrito,string IdProducto)
+        public JsonResult EliminarCarrito(string IdCarrito, string IdArticulo)
         {
             bool respuesta = false;
-            respuesta = CarritoLogica.Instancia.Eliminar(IdCarrito, IdProducto);
+            respuesta = CarritoLogica.Instancia.Eliminar(IdCarrito, IdArticulo);
             return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
         }
 

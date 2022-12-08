@@ -33,8 +33,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row row-tienda">
-                </div>
+                <div class="row row-categoria">
+            </div>
 
             </div>
             <div class="modal-footer">
@@ -48,25 +48,25 @@
 
     <script>
 
-        $(".btn-ver-tienda").click(function () {
+       $(".btn-ver-categoria").click(function () {
             jQuery.ajax({
-                url: '@Url.Action("ListarTienda", "Tienda")',
+                url: '@Url.Action("ListarCategoria", "Tienda")',
                 type: "GET",
                 data: null,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    $(".row-tienda").html("");
+                    $(".row-categoria").html("");
                     $(".modal-body").LoadingOverlay("hide");
                     if (data.data != null) {
                         $("<div>").addClass("col-4").append(
-                            $("<button>").addClass("btn btn-outline-primary btn-tienda m-1 w-100").text("Ver Todos").attr({ "onclick":"listarArticulo(0)"})
-                        ).appendTo(".row-tienda")
+                            $("<button>").addClass("btn btn-outline-primary btn-categoria m-1 w-100").text("Ver Todos").attr({ "onclick":"listarArticulo(0)"})
+                        ).appendTo(".row-categoria")
 
                         $.each(data.data, function (i, item) {
                             $("<div>").addClass("col-4").append(
-                                $("<button>").addClass("btn btn-outline-primary btn-tienda m-1 w-100").text(item.Descripcion).attr({ "onclick": "listarArticulo("+ item.IdTienda +")" })
-                            ).appendTo(".row-tienda")
+                                $("<button>").addClass("btn btn-outline-primary btn-categoria m-1 w-100").text(item.Descripcion).attr({ "onclick": "listarArticulos("+ item.IdCategoria +")" })
+                            ).appendTo(".row-categoria")
                         });
                     }
                 },
@@ -81,8 +81,9 @@
             $('#exampleModal').modal('show');
         });
 
+
         $(document).ready(function () {
-            listarProductos(0);
+            listarArticulos(0);
         })
 
         $(document).on('click', '.btn-detalle', function (event) {
@@ -90,16 +91,16 @@
             window.location.href = "@Url.Action("Articulo", "Tienda")" + "?idarticulo=" + json.IdArticulo;
         });
 
-        $(document).on('click', '.btn-tienda', function (event) {
+        $(document).on('click', '.btn-categoria', function (event) {
             $('#exampleModal').modal('hide');
         });
 
 
-        function listarArticulos(_idtienda) {
+        function listarArticulos(_idcategoria) {
             jQuery.ajax({
                 url: '@Url.Action("ListarArticulo", "Tienda")',
                 type: "POST",
-                data: JSON.stringify({ idtienda: _idtienda }),
+                data: JSON.stringify({ idcategoria: _idcategoria }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {

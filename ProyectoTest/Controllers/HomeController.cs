@@ -20,7 +20,7 @@ namespace ProyectoTest.Controllers
             return View();
         }
 
-        public ActionResult Tienda()
+        public ActionResult Categoria()
         {
             if (Session["Cliente"] == null)
                 return RedirectToAction("Index", "Login");
@@ -44,33 +44,35 @@ namespace ProyectoTest.Controllers
             return View();
         }
 
-        //public ActionResult Tienda()
-        //{
-        //    if (Session["Usuario"] == null)
-        //        return RedirectToAction("Index", "Login");
+        public ActionResult Tienda()
+        {
+            if (Session["Usuario"] == null)
+                return RedirectToAction("Index", "Login");
 
-        //    return View();
-        //}
+            return View();
+        }
 
 
         [HttpGet]
-        public JsonResult ListarTienda() {
-            List<Tienda> oLista = new List<Tienda>();
-            oLista = TiendaLogica.Instancia.Listar();
+        public JsonResult ListarCategoria()
+        {
+            List<Categoria> oLista = new List<Categoria>();
+            oLista = CategoriaLogica.Instancia.Listar();
             return Json(new { data = oLista }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult GuardarTienda(Tienda objeto)
+    
+        public JsonResult GuardarCategoria(Categoria objeto)
         {
             bool respuesta = false;
-            respuesta = (objeto.IdTienda == 0) ? TiendaLogica.Instancia.Registrar(objeto) : TiendaLogica.Instancia.Modificar(objeto);
+            respuesta = (objeto.IdCategoria == 0) ? CategoriaLogica.Instancia.Registrar(objeto) : CategoriaLogica.Instancia.Modificar(objeto);
             return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult EliminarTienda(int id)
+        public JsonResult EliminarCategoria(int id)
         {
             bool respuesta = false;
-            respuesta = TiendaLogica.Instancia.Eliminar(id);
+            respuesta = CategoriaLogica.Instancia.Eliminar(id);
             return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
         }
 
@@ -113,7 +115,7 @@ namespace ProyectoTest.Controllers
                           Nombre = o.Nombre,
                           Descripcion = o.Descripcion,
                           oMarca = o.oMarca,
-                          oTienda = o.oTienda,
+                          oCategoria = o.oCategoria,
                           Precio = o.Precio,
                           Stock = o.Stock,
                           RutaImagen = o.RutaImagen,
@@ -136,7 +138,7 @@ namespace ProyectoTest.Controllers
                 oArticulo = JsonConvert.DeserializeObject<Articulo>(objeto);
 
                 string GuardarEnRuta = "~/Imagenes/Articulos/";
-                string physicalPath = Server.MapPath("~/Imagenes/Articulo");
+                string physicalPath = Server.MapPath("~/Imagenes/Articulos");
 
                 if (!Directory.Exists(physicalPath))
                     Directory.CreateDirectory(physicalPath);

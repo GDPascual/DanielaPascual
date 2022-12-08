@@ -1,17 +1,17 @@
 ﻿
 @{
-    ViewBag.Title = "Tienda";
+    ViewBag.Title = "Categoria";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb mb-4 mt-4">
     <li class="breadcrumb-item"><a href="#">Mantenedores</a></li>
-    <li class="breadcrumb-item active">Tiendas</li>
+    <li class="breadcrumb-item active">Categorias</li>
 </ol>
 
 <div class="card mb-4">
     <div class="card-header">
-        <i class="fas fa-table me-1"></i> Listado de Tiendas
+        <i class="fas fa-table me-1"></i> Listado de Categorias
     </div>
     <div class="card-body">
         <div class="row">
@@ -37,11 +37,11 @@
 
 
 <!-- Modal -->
-<div  class="modal fade" id="FormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="FormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="exampleModalLabel">Tienda</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Categoria</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -92,7 +92,7 @@
                 tabladata = $('#tabla').DataTable({
                     responsive:true,
                     "ajax": {
-                        "url": '@Url.Action("ListarTienda", "Home")',
+                        "url": '@Url.Action("ListarCategoria", "Home")',
                         "type": "GET",
                         "datatype": "json"
                     },
@@ -108,7 +108,7 @@
                             }
                         },
                         {
-                            "data": "IdTienda", "render": function (data, type, row, meta) {
+                            "data": "IdCategoria", "render": function (data, type, row, meta) {
 
                                 return $("<button>").addClass("btn btn-primary btn-editar btn-sm").append(
                                     $("<i>").addClass("fas fa-pen")
@@ -146,7 +146,7 @@
 
             if (json != null) {
 
-                $("#txtid").val(json.IdTienda);
+                $("#txtid").val(json.IdCategoria);
                 $("#txtdescripcion").val(json.Descripcion);
                 $("#cboEstado").val(json.Activo == true ? 1 : 0);
             }
@@ -158,9 +158,9 @@
             var json = $(this).data("informacion")
 
             jQuery.ajax({
-                url: '@Url.Action("EliminarTienda", "Home")',
+                url: '@Url.Action("EliminarCategoria", "Home")',
                 type: "POST",
-                data: JSON.stringify({ id: json.IdTienda}),
+                data: JSON.stringify({ id: json.IdCategoria}),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
@@ -190,7 +190,7 @@
             }
 
             jQuery.ajax({
-                url: '@Url.Action("GuardarTienda", "Home")',
+                url: '@Url.Action("GuardarCategoria", "Home")',
                 type: "POST",
                 data: JSON.stringify(request),
                 dataType: "json",

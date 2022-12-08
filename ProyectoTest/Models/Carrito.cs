@@ -8,7 +8,7 @@ namespace ProyectoTest.Models
     public class Carrito
     {
         public int IdCarrito { get; set; }
-        public Articulo OArticulo { get; set; }
+        public Articulo oArticulo { get; set; }
         public Cliente oCliente { get; set; }
     }
 }

@@ -53,7 +53,7 @@ namespace ProyectoTest.Logica
                             Nombre = dr["Nombre"].ToString(),
                             Descripcion = dr["Descripcion"].ToString(),
                             oMarca = new Marca() { IdMarca = Convert.ToInt32(dr["IdMarca"].ToString()),Descripcion = dr["DescripcionMarca"].ToString() },
-                            oTienda = new Tienda() { IdTienda = Convert.ToInt32(dr["IdTienda"].ToString()), Descripcion = dr["DescripcionTienda"].ToString() },
+                            oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(dr["IdCategoria"].ToString()), Descripcion = dr["DescripcionCategoria"].ToString() },
                             Precio = Convert.ToDecimal(dr["Precio"].ToString(), new CultureInfo("es-PE")),
                             Stock = Convert.ToInt32(dr["Stock"].ToString()),
                             RutaImagen = dr["RutaImagen"].ToString(),
@@ -86,7 +86,7 @@ namespace ProyectoTest.Logica
                     cmd.Parameters.AddWithValue("Nombre", oArticulo.Nombre );
                     cmd.Parameters.AddWithValue("Descripcion", oArticulo.Descripcion );
                     cmd.Parameters.AddWithValue("IdMarca", oArticulo.oMarca.IdMarca );
-                    cmd.Parameters.AddWithValue("IdTienda", oArticulo.oTienda.IdTienda);
+                    cmd.Parameters.AddWithValue("IdCategoria", oArticulo.oCategoria.IdCategoria);
                     cmd.Parameters.AddWithValue("Precio", oArticulo.Precio );
                     cmd.Parameters.AddWithValue("Stock", oArticulo.Stock );
                     cmd.Parameters.AddWithValue("RutaImagen", oArticulo.RutaImagen );
@@ -120,7 +120,7 @@ namespace ProyectoTest.Logica
                     cmd.Parameters.AddWithValue("Nombre", oArticulo.Nombre);
                     cmd.Parameters.AddWithValue("Descripcion", oArticulo.Descripcion);
                     cmd.Parameters.AddWithValue("IdMarca", oArticulo.oMarca.IdMarca);
-                    cmd.Parameters.AddWithValue("IdTienda", oArticulo.oTienda.IdTienda);
+                    cmd.Parameters.AddWithValue("IdCategoria", oArticulo.oCategoria.IdCategoria);
                     cmd.Parameters.AddWithValue("Precio", oArticulo.Precio);
                     cmd.Parameters.AddWithValue("Stock", oArticulo.Stock);
                     cmd.Parameters.AddWithValue("Activo", oArticulo.Activo);

@@ -129,7 +129,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logica\CarritoLogica.cs" />
-    <Compile Include="Logica\TiendaLogica.cs" />
+    <Compile Include="Logica\CategoriaLogica.cs" />
     <Compile Include="Logica\CompraLogica.cs" />
     <Compile Include="Logica\Conexion.cs" />
     <Compile Include="Logica\MarcaLogica.cs" />
@@ -138,7 +138,7 @@
     <Compile Include="Logica\ClienteLogica.cs" />
     <Compile Include="Logica\utilidades.cs" />
     <Compile Include="Models\Carrito.cs" />
-    <Compile Include="Models\Tienda.cs" />
+    <Compile Include="Models\Categoria.cs" />
     <Compile Include="Models\Compra.cs" />
     <Compile Include="Models\Departamento.cs" />
     <Compile Include="Models\DetalleCompra.cs" />

@@ -8,33 +8,36 @@ using System.Web;
 
 namespace ProyectoTest.Logica
 {
-    public class TiendaLogica
+    public class CategoriaLogica
     {
 
-        private static TiendaLogica _instancia = null;
+        private static CategoriaLogica _instancia = null;
 
-        public TiendaLogica() {
+        public CategoriaLogica()
+        {
 
         }
 
-        public static TiendaLogica Instancia
+        public static CategoriaLogica Instancia
         {
-            get {
+            get
+            {
                 if (_instancia == null)
                 {
-                    _instancia = new TiendaLogica();
+                    _instancia = new CategoriaLogica();
                 }
 
                 return _instancia;
             }
         }
 
-        public List<Tienda> Listar() {
+        public List<Categoria> Listar()
+        {
 
-            List<Tienda> rptListaTienda = new List<Tienda>();
+            List<Categoria> rptListaCategoria = new List<Categoria>();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
-                SqlCommand cmd = new SqlCommand("sp_obtenerTienda", oConexion);
+                SqlCommand cmd = new SqlCommand("sp_obtenerCategoria", oConexion);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 try
@@ -44,36 +47,36 @@ namespace ProyectoTest.Logica
 
                     while (dr.Read())
                     {
-                        rptListaTienda.Add(new Tienda()
+                        rptListaCategoria.Add(new Categoria()
                         {
-                            IdTienda = Convert.ToInt32(dr["IdTienda"].ToString()),
+                            IdCategoria = Convert.ToInt32(dr["IdCategoria"].ToString()),
                             Descripcion = dr["Descripcion"].ToString(),
                             Activo = Convert.ToBoolean(dr["Activo"].ToString())
                         });
                     }
                     dr.Close();
 
-                    return rptListaTienda;
+                    return rptListaCategoria;
 
                 }
                 catch (Exception ex)
                 {
-                    rptListaTienda = null;
-                    return rptListaTienda;
+                    rptListaCategoria = null;
+                    return rptListaCategoria;
                 }
             }
         }
 
 
-        public bool Registrar(Tienda oTienda)
+        public bool Registrar(Categoria oCategoria)
         {
             bool respuesta = true;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_RegistrarTienda", oConexion);
-                    cmd.Parameters.AddWithValue("Descripcion", oTienda.Descripcion);
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarCategoria", oConexion);
+                    cmd.Parameters.AddWithValue("Descripcion", oCategoria.Descripcion);
                     cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -92,7 +95,7 @@ namespace ProyectoTest.Logica
             return respuesta;
         }
 
-        public bool Modificar(Tienda oTienda)
+        public bool Modificar(Categoria oCategoria)
         {
             bool respuesta = true;
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
@@ -100,9 +103,9 @@ namespace ProyectoTest.Logica
                 try
                 {
                     SqlCommand cmd = new SqlCommand("sp_ModificarCategoria", oConexion);
-                    cmd.Parameters.AddWithValue("IdTienda", oTienda.IdTienda);
-                    cmd.Parameters.AddWithValue("Descripcion", oTienda.Descripcion);
-                    cmd.Parameters.AddWithValue("Activo", oTienda.Activo);
+                    cmd.Parameters.AddWithValue("IdCategoria", oCategoria.IdCategoria);
+                    cmd.Parameters.AddWithValue("Descripcion", oCategoria.Descripcion);
+                    cmd.Parameters.AddWithValue("Activo", oCategoria.Activo);
                     cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
 
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -132,7 +135,7 @@ namespace ProyectoTest.Logica
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("delete from TIENDA where idtienda = @id", oConexion);
+                    SqlCommand cmd = new SqlCommand("delete from CATEGORIA where idcategoria = @id", oConexion);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.CommandType = CommandType.Text;
 
