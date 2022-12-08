@@ -46,7 +46,7 @@ namespace ProyectoTest.Logica
 
                     SqlCommand cmd = new SqlCommand("sp_registrarCompra", oConexion);
                     cmd.Parameters.AddWithValue("IdCliente", oCompra.IdCliente);
-                   
+                    cmd.Parameters.AddWithValue("TotalArticulo", oCompra.TotalArticulo);
                     cmd.Parameters.AddWithValue("Total", oCompra.Total);
                     cmd.Parameters.AddWithValue("Contacto", oCompra.Contacto);
                     cmd.Parameters.AddWithValue("Telefono", oCompra.Telefono);

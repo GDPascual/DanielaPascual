@@ -9,7 +9,7 @@ namespace ProyectoTest.Models
     {
         public int IdCompra { get; set; }
         public int IdCliente { get; set; }
-        
+        public string TotalArticulo { get; set; }
         public decimal Total { get; set; }
         public string Contacto { get; set; }
         public string Telefono { get; set; }
